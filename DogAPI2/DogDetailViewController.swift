@@ -7,13 +7,17 @@
 
 import UIKit
 
-class DogDetailViewController: UIViewController {
+class DogDetailViewController: UIViewController, UIScrollViewDelegate {
+    
     
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     var imageURLs: [String] = []
     var currentIndex: Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
+        //右スワイプのジェスチャー
         let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
         swipeRightGesture.direction = .right
         imageView.addGestureRecognizer(swipeRightGesture)
@@ -23,8 +27,25 @@ class DogDetailViewController: UIViewController {
         swipeLeftGesture.direction = .left
         imageView.addGestureRecognizer(swipeLeftGesture)
         
-        loadImage(at: currentIndex)
+        // 画像の拡大縮小
+        scrollView.delegate = self
+               scrollView.minimumZoomScale = 1.0
+               scrollView.maximumZoomScale = 3.0
         
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
+               scrollView.addGestureRecognizer(pinchGesture)
+        
+        loadImage(at: currentIndex)
+    }
+    @objc func handlePinchGesture(_ gesture: UIPinchGestureRecognizer) {
+           if let view = gesture.view {
+               view.transform = view.transform.scaledBy(x: gesture.scale, y: gesture.scale)
+               gesture.scale = 1.0
+           }
+       }
+
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
     }
     @objc func handleSwipeGesture(_ gesture: UISwipeGestureRecognizer) {
         if gesture.direction == .right {
@@ -40,6 +61,7 @@ class DogDetailViewController: UIViewController {
             if currentIndex >= imageURLs.count {
                 currentIndex = 0
             }
+            
             loadImage(at: currentIndex)
         }
     }
@@ -68,5 +90,4 @@ class DogDetailViewController: UIViewController {
             }
         }.resume()
     }
-    
 }

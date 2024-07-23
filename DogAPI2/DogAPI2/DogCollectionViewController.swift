@@ -54,15 +54,15 @@ class DogCollectionViewController: UIViewController,UICollectionViewDataSource, 
         return cell
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "DogDetailSegue" {
-//            if let dogDetailVC = segue.destination as? DogDetailViewController,
-//               let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first {
-//                dogDetailVC.imageURLs = dogImages
-//                dogDetailVC.currentIndex = selectedIndexPath.item
-//            }
-//        }
-//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "DogDetailSegue" {
+            if let dogDetailVC = segue.destination as? DogDetailViewController,
+               let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first {
+                dogDetailVC.imageURLs = dogImages
+                dogDetailVC.currentIndex = selectedIndexPath.item
+            }
+        }
+    }
     
 }
 
@@ -83,5 +83,7 @@ extension DogCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-
+    
 }
+
+
